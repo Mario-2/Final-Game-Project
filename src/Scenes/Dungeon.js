@@ -1,6 +1,6 @@
-class RPG extends Phaser.Scene {
+class Dungeon extends Phaser.Scene {
     constructor() {
-        super("rpgScene");
+        super("dungeon");
     }
 
     init() {
@@ -8,12 +8,12 @@ class RPG extends Phaser.Scene {
     }
 
     create() {
-        this.map = this.add.tilemap("overworld", 16, 16, 30, 20);
+        this.map = this.add.tilemap("dungeon", 16, 16, 50, 50);
 
         // Add a tileset to the map
         // First parameter: name we gave the tileset in Tiled
         // Second parameter: key for the tilesheet (from this.load.image in Load.js)
-        this.tileset = this.map.addTilesetImage("overworld_tiles", "overworld_tiles");
+        this.tileset = this.map.addTilesetImage("dungeon_tiles", "dungeon_tiles");
 
         // Create a layer
         this.groundLayer = this.map.createLayer("Ground", this.tileset, 0, 0);
@@ -44,6 +44,18 @@ class RPG extends Phaser.Scene {
         for(let i = 0; i < this.transitionLayer.objects.length; i++) {
             my.sprite.transition[i] = this.physics.add.sprite(this.transitionLayer.objects[i].x * this.SCALE, this.transitionLayer.objects[i].y * this.SCALE, "player").setScale(this.SCALE);
             this.physics.add.collider(my.sprite.player, my.sprite.transition[i], _ => this.sceneTransition(this.transitionLayer.objects[i].properties[0].value, this.transitionLayer.objects[i].properties[1].value));
+        }
+
+        // add camera zones
+        this.cameraLayer = this.map.getObjectLayer("Camera");
+        my.sprite.cameraZones = [];
+        for(let i = 0; i < this.cameraLayer.objects.length; i++) {
+            my.sprite.cameraZones[i] = this.add.rectangle((this.cameraLayer.objects[i].x + this.cameraLayer.objects[i].width/2) * this.SCALE, (this.cameraLayer.objects[i].y - this.cameraLayer.objects[i].height/2) * this.SCALE, this.cameraLayer.objects[i].width * this.SCALE, this.cameraLayer.objects[i].height * this.SCALE); // x, y, width, height
+            my.sprite.cameraZones[i] = this.physics.add.existing(my.sprite.cameraZones[i], true); // 'true' makes it static
+            my.sprite.cameraZones[i].visible = false;
+            console.log("camera: " + this.cameraLayer.objects[i].x * this.SCALE, this.cameraLayer.objects[i].y * this.SCALE, this.cameraLayer.objects[i].width * this.SCALE, this.cameraLayer.objects[i].height * this.SCALE);
+
+            this.physics.add.overlap(my.sprite.player, my.sprite.cameraZones[i], _ => this.cameras.main.setBounds((this.cameraLayer.objects[i].x) * this.SCALE, (this.cameraLayer.objects[i].y - this.cameraLayer.objects[i].height) * this.SCALE, this.cameraLayer.objects[i].width * this.SCALE, this.cameraLayer.objects[i].height * this.SCALE));
         }
 
         this.cameras.main.startFollow(my.sprite.player);

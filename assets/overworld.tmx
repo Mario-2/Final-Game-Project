@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="5">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="6" nextobjectid="5">
  <editorsettings>
   <export target="overworld.tmj" format="json"/>
  </editorsettings>
@@ -401,8 +401,10 @@
  <objectgroup id="4" name="SceneTransitions">
   <object id="4" gid="94" x="224.5" y="36" width="16" height="16">
    <properties>
-    <property name="scene" value="rpgScene"/>
+    <property name="scene" value="dungeon"/>
+    <property name="spawn" type="int" value="0"/>
    </properties>
   </object>
  </objectgroup>
+ <objectgroup id="5" name="NPCs"/>
 </map>

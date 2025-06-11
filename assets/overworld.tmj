@@ -113,7 +113,12 @@
                         {
                          "name":"scene",
                          "type":"string",
-                         "value":"rpgScene"
+                         "value":"dungeon"
+                        }, 
+                        {
+                         "name":"spawn",
+                         "type":"int",
+                         "value":0
                         }],
                  "rotation":0,
                  "type":"",
@@ -127,8 +132,19 @@
          "visible":true,
          "x":0,
          "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":5,
+         "name":"NPCs",
+         "objects":[],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
         }],
- "nextlayerid":5,
+ "nextlayerid":6,
  "nextobjectid":5,
  "orientation":"orthogonal",
  "renderorder":"right-down",
