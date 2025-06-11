@@ -8,14 +8,25 @@
     ],
     "fileStates": {
         "dungeon.tmx": {
-            "scale": 2,
+            "scale": 1.5,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 250.75,
-                "y": 166.5
+                "x": 225.66666666666666,
+                "y": 184.66666666666663
             }
         },
         "dungeon.tmx#dungeon_tiles": {
+            "scaleInDock": 1
+        },
+        "overworld.tmx": {
+            "scale": 2,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 240.25,
+                "y": 173.5
+            }
+        },
+        "overworld.tmx#overworld_tiles": {
             "scaleInDock": 1
         }
     },
@@ -29,7 +40,7 @@
         "dungeon.tmx"
     ],
     "project": "overworld.tiled-project",
-    "property.type": "bool",
+    "property.type": "string",
     "recentFiles": [
         "dungeon.tmx"
     ],

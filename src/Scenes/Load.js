@@ -15,6 +15,10 @@ class Load extends Phaser.Scene {
         this.load.image("dungeon_tiles", "dungeon_tiles.png");                         // Packed tilemap
         this.load.tilemapTiledJSON("dungeon", "dungeon.tmj");   // Tilemap in JSON
 
+        // Load tilemap information
+        this.load.image("overworld_tiles", "overworld_tiles.png");                         // Packed tilemap
+        this.load.tilemapTiledJSON("overworld", "overworld.tmj");   // Tilemap in JSON
+
 
         this.load.image("player", "tile_0096.png");
         this.load.image("sword", "tile_0106.png");
@@ -23,6 +27,7 @@ class Load extends Phaser.Scene {
     }
 
     create() {
+        this.registry.set('spawnpoint', 0);
          // ...and pass to the next Scene
          this.scene.start("rpgScene");
     }
