@@ -17,6 +17,7 @@ class Load extends Phaser.Scene {
 
 
         this.load.image("player", "tile_0096.png");
+        this.load.image("sword", "tile_0106.png");
 
         this.load.multiatlas("kenny-particles", "kenny-particles.json");
     }
