@@ -24,12 +24,14 @@ class Load extends Phaser.Scene {
         this.load.image("sword", "tile_0106.png");
 
         this.load.multiatlas("kenny-particles", "kenny-particles.json");
+
+        this.load.bitmapFont("rocketSquare", "KennyRocketSquare_0.png", "KennyRocketSquare.fnt");
     }
 
     create() {
         this.registry.set('spawnpoint', 0);
          // ...and pass to the next Scene
-         this.scene.start("rpgScene");
+         this.scene.start("Title");
     }
 
     // Never get here since a new scene is started in create()

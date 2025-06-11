@@ -24,7 +24,7 @@ let config = {
     },
     width: 1440,
     height: 900,
-    scene: [Load, Dungeon, RPG]
+    scene: [Load, TitleScreen, Dungeon, RPG]
 }
 
 var cursors;
