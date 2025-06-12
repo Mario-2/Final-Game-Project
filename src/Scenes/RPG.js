@@ -43,7 +43,19 @@ class RPG extends Phaser.Scene {
         my.sprite.transition = [];
         for(let i = 0; i < this.transitionLayer.objects.length; i++) {
             my.sprite.transition[i] = this.physics.add.sprite(this.transitionLayer.objects[i].x * this.SCALE, this.transitionLayer.objects[i].y * this.SCALE, "player").setScale(this.SCALE);
+            my.sprite.transition[i].setVisible(false);
             this.physics.add.collider(my.sprite.player, my.sprite.transition[i], _ => this.sceneTransition(this.transitionLayer.objects[i].properties[0].value, this.transitionLayer.objects[i].properties[1].value));
+        }
+
+        this.signLayer = this.map.getObjectLayer("NPCs");
+
+        my.sprite.sign = [];
+        for(let i = 0; i < this.signLayer.objects.length; i++) {
+            my.sprite.sign[i] = this.add.sprite(this.signLayer.objects[i].x * this.SCALE, this.signLayer.objects[i].y * this.SCALE, "sign").setScale(this.SCALE);
+            my.sprite.sign[i].text = null;
+            my.sprite.sign[i] = this.physics.add.existing(my.sprite.sign[i], true); // set collider to static
+            this.physics.add.collider(my.sprite.player, my.sprite.sign[i]);
+            this.physics.add.overlap(my.sprite.player.sword, my.sprite.sign[i], _ => this.signInteract(my.sprite.sign[i], this.signLayer.objects[i].properties[0].value));
         }
 
         this.cameras.main.startFollow(my.sprite.player);
@@ -58,5 +70,14 @@ class RPG extends Phaser.Scene {
     sceneTransition(scene, spawn) {
         this.registry.set('spawnpoint', spawn);
         this.scene.start(scene);
+    }
+
+    signInteract(sprite, text) {
+        if(sprite.text == null) 
+            this.sound.play("pickup", {
+            volume: 0.5 
+            });{
+            sprite.text = this.add.bitmapText(sprite.x - 86 * 2, sprite.y - 86, "rocketSquare", text, 32, 1);
+        }
     }
 }

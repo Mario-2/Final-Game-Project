@@ -29,6 +29,9 @@ class Load extends Phaser.Scene {
         this.load.image("dagger", "tile_0103.png");
         this.load.image("ghost", "tile_0121.png");
         this.load.image("potion", "tile_0115.png");
+        this.load.image("key", "tile_0130.png");
+        this.load.image("sign", "sign.png");
+        this.load.image("chest", "tile_0089.png");
 
         this.load.multiatlas("kenny-particles", "kenny-particles.json");
 
@@ -36,7 +39,6 @@ class Load extends Phaser.Scene {
     }
 
     create() {
-        this.registry.set('spawnpoint', 0);
          // ...and pass to the next Scene
          this.scene.start("title");
     }

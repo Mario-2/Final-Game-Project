@@ -8,28 +8,25 @@ class TitleScreen extends Phaser.Scene {
     create() {
         let my = this.my;
 
-        this.add.bitmapText(100, 275, "rocketSquare", "Controls", 32, 1);
-        this.add.bitmapText(520, 275, "rocketSquare", "Credits", 32, 1);
-        this.add.bitmapText(335, 400, "rocketSquare", "Start", 32, 1);
+        this.add.bitmapText(100, 125, "rocketSquare", "DUNGEON\nDELVER", 128, 0);
+        this.add.bitmapText(100, 500, "rocketSquare", "Credits [X]", 64, 1);
+        this.add.bitmapText(100, 400, "rocketSquare", "Start [Z]", 64, 1);
 
-        this.left = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
-        this.right = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
-        this.space = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+        this.z = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z);
+        this.x = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.X);
+
+        this.registry.set('spawnpoint', 0);
     }
 
     update() {
         let my = this.my;
 
-        if (Phaser.Input.Keyboard.JustDown(this.left)) {
-            this.scene.start("dungeon");
+        if (Phaser.Input.Keyboard.JustDown(this.z)) {
+            this.scene.start("rpgScene");
         }
 
-        if (Phaser.Input.Keyboard.JustDown(this.right)) {
-            this.scene.start("Credits");
-        }
-
-        if (Phaser.Input.Keyboard.JustDown(this.space)) {
-            this.scene.start("Wave1");
+        if (Phaser.Input.Keyboard.JustDown(this.x)) {
+            this.scene.start("credits");
         }
     }
 }

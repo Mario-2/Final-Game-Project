@@ -137,7 +137,43 @@
          "draworder":"topdown",
          "id":5,
          "name":"NPCs",
-         "objects":[],
+         "objects":[
+                {
+                 "gid":84,
+                 "height":16,
+                 "id":5,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"text",
+                         "type":"string",
+                         "value":"Find 2 keys to open\nthe dungeon's door"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":16,
+                 "x":198.333333333333,
+                 "y":201.666666666667
+                }, 
+                {
+                 "gid":84,
+                 "height":16,
+                 "id":6,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"text",
+                         "type":"string",
+                         "value":"Welcome to Flower Town!"
+                        }],
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":16,
+                 "x":325.333333333333,
+                 "y":185.666666666667
+                }],
          "opacity":1,
          "type":"objectgroup",
          "visible":true,
@@ -145,7 +181,7 @@
          "y":0
         }],
  "nextlayerid":6,
- "nextobjectid":5,
+ "nextobjectid":7,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.11.2",

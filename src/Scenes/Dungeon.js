@@ -27,6 +27,14 @@ class Dungeon extends Phaser.Scene {
             collides: true
         });
 
+        // Create a layer
+        this.lockLayer = this.map.createLayer("Door", this.tileset, 0, 0);
+        this.lockLayer.setScale(this.SCALE);
+
+        this.lockLayer.setCollisionByProperty({
+            collides: true
+        });
+
         // Get the player object layer
         this.playerLayer = this.map.getObjectLayer("Player");
         this.spawnpoint = this.registry.get('spawnpoint');
@@ -36,6 +44,7 @@ class Dungeon extends Phaser.Scene {
 
         my.sprite.player = new Player(this, this.playerLayer.objects[this.spawnpoint].x * this.SCALE, this.playerLayer.objects[this.spawnpoint].y * this.SCALE, "player", null, this.cursors, this.attack, this.SCALE, 500);
         this.physics.add.collider(my.sprite.player, this.wallLayer);
+        this.doorCollider = this.physics.add.collider(my.sprite.player, this.lockLayer);
 
         // add scene transitions
         this.transitionLayer = this.map.getObjectLayer("SceneTransitions");
@@ -43,6 +52,7 @@ class Dungeon extends Phaser.Scene {
         my.sprite.transition = [];
         for(let i = 0; i < this.transitionLayer.objects.length; i++) {
             my.sprite.transition[i] = this.physics.add.sprite(this.transitionLayer.objects[i].x * this.SCALE, this.transitionLayer.objects[i].y * this.SCALE, "player").setScale(this.SCALE);
+            my.sprite.transition[i].setVisible(false);
             this.physics.add.collider(my.sprite.player, my.sprite.transition[i], _ => this.sceneTransition(this.transitionLayer.objects[i].properties[0].value, this.transitionLayer.objects[i].properties[1].value));
         }
 
@@ -60,6 +70,20 @@ class Dungeon extends Phaser.Scene {
             my.sprite.healing[i] = this.physics.add.sprite(this.healingLayer.objects[i].x * this.SCALE, this.healingLayer.objects[i].y * this.SCALE, "potion").setScale(this.SCALE);
             this.physics.add.overlap(my.sprite.player, my.sprite.healing[i], _ => this.healingPotion(my.sprite.healing[i]))
         }
+
+        this.keyLayer = this.map.getObjectLayer("Key");
+        this.keys = 0;
+
+        my.sprite.key = [];
+        for(let i = 0; i < this.keyLayer.objects.length; i++) {
+            my.sprite.key[i] = this.physics.add.sprite(this.keyLayer.objects[i].x * this.SCALE, this.keyLayer.objects[i].y * this.SCALE, "key").setScale(this.SCALE);
+            this.physics.add.overlap(my.sprite.player, my.sprite.key[i], _ => this.collectKey(my.sprite.key[i]))
+        }
+
+        this.chestLayer = this.map.getObjectLayer("End");
+
+        my.sprite.chest = this.physics.add.sprite(this.chestLayer.objects[0].x * this.SCALE, this.chestLayer.objects[0].y * this.SCALE, "chest").setScale(this.SCALE);
+        this.physics.add.overlap(my.sprite.player, my.sprite.chest, _ => this.scene.start("win"));
 
         // add camera zones
         this.cameraLayer = this.map.getObjectLayer("Camera");
@@ -119,5 +143,19 @@ class Dungeon extends Phaser.Scene {
         potion.setActive(false);
         potion.x = -1000;
         my.sprite.player.onHeal();
+    }
+
+    collectKey(key) {
+        key.setVisible(false);
+        key.setActive(false);
+        key.x = -1000;
+        this.keys++;
+        this.sound.play("pickup", {
+            volume: 0.5 
+         });
+        if(this.keys >= 2) {
+            this.physics.world.removeCollider(this.doorCollider);
+            this.map.destroyLayer("Door");
+        }
     }
 }

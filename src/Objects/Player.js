@@ -102,7 +102,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.hpText.alpha = 1;
         this.hpText.setText(this.hp);
         if(this.hp <= 0) {
-            console.log("game over")
+            this.scene.scene.start("gameover");
         }
     }
 
