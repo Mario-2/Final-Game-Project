@@ -1,6 +1,6 @@
 class TitleScreen extends Phaser.Scene {
     constructor() {
-        super("Title");
+        super("title");
 
         this.my = {sprite: {}};
     }
@@ -21,7 +21,7 @@ class TitleScreen extends Phaser.Scene {
         let my = this.my;
 
         if (Phaser.Input.Keyboard.JustDown(this.left)) {
-            this.scene.start("Controls");
+            this.scene.start("dungeon");
         }
 
         if (Phaser.Input.Keyboard.JustDown(this.right)) {

@@ -5,6 +5,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.cursors = cursors;
         this.attackKey = attackKey;
         this.playerSpeed = playerSpeed;
+        this.hp = 3;
+        this.hpText = scene.add.bitmapText(this.x, this.y - 86, "rocketSquare", this.hp, 64, 1);
 
         scene.add.existing(this);
         scene.physics.add.existing(this);
@@ -15,23 +17,39 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.attackCdMax = 20;
         this.attackCd = 0;
         this.setScale(scale);
+        this.moving = false;
 
         this.sword = new Sword(scene, 0, 0, "sword", null).setScale(scale);
+
+        this.walkingvfx = scene.add.particles(0, 0, "kenny-particles", {
+            frame: ['smoke_03.png', 'smoke_09.png'],
+            scale: {start: 0.1, end: 0.05},
+            lifespan: 350,
+            alpha: {start: 1, end: 0.1}, 
+            frequency: 100
+        });
+
+        this.walkingvfx.stop();
+        this.walkingvfx.startFollow(this, 0, this.displayHeight/2);
 
         return this;
     }
 
     update() {
+        this.moving = false;
+
         // Moving left
         if (this.cursors.left.isDown) {
             this.body.setVelocityX(-this.playerSpeed);
             this.flipX = true;
             this.dir = 0;
+            this.moving = true;
         } // Moving right
         else if (this.cursors.right.isDown) {
             this.body.setVelocityX(this.playerSpeed);
             this.flipX = false;
             this.dir = 2;
+            this.moving = true;
         }
         else {
             this.body.setVelocityX(0);
@@ -41,13 +59,22 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         if (this.cursors.up.isDown) {
             this.body.setVelocityY(-this.playerSpeed);
             this.dir = 1;
+            this.moving = true;
         } // Moving down
         else if (this.cursors.down.isDown) {
             this.body.setVelocityY(this.playerSpeed);
             this.dir = 3;
+            this.moving = true;
         }
         else {
             this.body.setVelocityY(0);
+        }
+
+        if(this.moving) { 
+            this.walkingvfx.start();
+        }
+        else {
+            this.walkingvfx.stop();
         }
 
         if(this.attackKey.isDown && this.attackCd < 0) {
@@ -55,9 +82,23 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             this.sword.attack(this.x, this.y, this.dir);
         }
 
+        this.hpText.y -= 1;
+        this.hpText.alpha -= 0.04;
+
         this.sword.update();
 
         this.attackCd--;
+    }
+
+    onHit() {
+        this.hp--;
+        this.hpText.y = this.y - 86;
+        this.hpText.x = this.x;
+        this.hpText.alpha = 1;
+        this.hpText.setText(this.hp);
+        if(this.hp <= 0) {
+            console.log("game over")
+        }
     }
 
 }

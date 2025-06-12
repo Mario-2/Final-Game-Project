@@ -46,8 +46,16 @@ class Dungeon extends Phaser.Scene {
             this.physics.add.collider(my.sprite.player, my.sprite.transition[i], _ => this.sceneTransition(this.transitionLayer.objects[i].properties[0].value, this.transitionLayer.objects[i].properties[1].value));
         }
 
+        this.enemyLayer = this.map.getObjectLayer("Enemies");
+
+        my.sprite.enemies = [];
+        for(let i = 0; i < this.enemyLayer.objects.length; i++) {
+            my.sprite.enemies[i] = new Enemy(this, this.enemyLayer.objects[i].x * this.SCALE, this.enemyLayer.objects[i].y * this.SCALE, "player", null, this.SCALE, my.sprite.player);
+        }
+
         // add camera zones
         this.cameraLayer = this.map.getObjectLayer("Camera");
+        this.currentCameraZone = -1;
         my.sprite.cameraZones = [];
         for(let i = 0; i < this.cameraLayer.objects.length; i++) {
             my.sprite.cameraZones[i] = this.add.rectangle((this.cameraLayer.objects[i].x + this.cameraLayer.objects[i].width/2) * this.SCALE, (this.cameraLayer.objects[i].y - this.cameraLayer.objects[i].height/2) * this.SCALE, this.cameraLayer.objects[i].width * this.SCALE, this.cameraLayer.objects[i].height * this.SCALE); // x, y, width, height
@@ -55,7 +63,7 @@ class Dungeon extends Phaser.Scene {
             my.sprite.cameraZones[i].visible = false;
             console.log("camera: " + this.cameraLayer.objects[i].x * this.SCALE, this.cameraLayer.objects[i].y * this.SCALE, this.cameraLayer.objects[i].width * this.SCALE, this.cameraLayer.objects[i].height * this.SCALE);
 
-            this.physics.add.overlap(my.sprite.player, my.sprite.cameraZones[i], _ => this.cameras.main.setBounds((this.cameraLayer.objects[i].x) * this.SCALE, (this.cameraLayer.objects[i].y - this.cameraLayer.objects[i].height) * this.SCALE, this.cameraLayer.objects[i].width * this.SCALE, this.cameraLayer.objects[i].height * this.SCALE));
+            this.physics.add.overlap(my.sprite.player, my.sprite.cameraZones[i], _ => this.cameraZone((this.cameraLayer.objects[i].x) * this.SCALE, (this.cameraLayer.objects[i].y - this.cameraLayer.objects[i].height) * this.SCALE, this.cameraLayer.objects[i].width * this.SCALE, this.cameraLayer.objects[i].height * this.SCALE, i));
         }
 
         this.cameras.main.startFollow(my.sprite.player);
@@ -65,10 +73,36 @@ class Dungeon extends Phaser.Scene {
 
     update() {
         my.sprite.player.update();
+        for(let i = 0; i < my.sprite.enemies.length; i++) {
+            if(my.sprite.enemies[i].active) {
+                my.sprite.enemies[i].update();
+            }
+        }
     }
 
     sceneTransition(scene, spawn) {
         this.registry.set('spawnpoint', spawn);
         this.scene.start(scene);
+    }
+
+    cameraZone(x, y, width, height, zone) {
+        if(this.currentCameraZone != zone) {
+            this.currentCameraZone = zone;
+
+            for(let i = 0; i < my.sprite.enemies.length; i++) {
+                if(my.sprite.enemies[i].defeated == false) {
+                    if(my.sprite.enemies[i].x > x && my.sprite.enemies[i].x < x + width && my.sprite.enemies[i].y > y && my.sprite.enemies[i].y < y + height) {
+                        my.sprite.enemies[i].setActive(true);
+                        my.sprite.enemies[i].setVisible(true);
+                    }
+                    else {
+                        my.sprite.enemies[i].setActive(false);
+                        my.sprite.enemies[i].setVisible(false);
+                    }
+                }
+            }
+
+            this.cameras.main.setBounds(x, y, width, height);
+        }
     }
 }
