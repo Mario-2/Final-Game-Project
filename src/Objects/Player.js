@@ -11,6 +11,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         scene.add.existing(this);
         scene.physics.add.existing(this);
 
+        this.scene = scene;
+
         this.body.setDrag(1400);
         this.body.setMaxVelocity(300);
         this.dir = 0;
@@ -91,6 +93,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     onHit() {
+        this.scene.sound.play("hit", {
+            volume: 0.5 
+         });
         this.hp--;
         this.hpText.y = this.y - 86;
         this.hpText.x = this.x;
@@ -99,6 +104,17 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         if(this.hp <= 0) {
             console.log("game over")
         }
+    }
+
+    onHeal() {
+        this.scene.sound.play("pickup", {
+            volume: 0.5 
+         });
+        this.hp++;
+        this.hpText.y = this.y - 86;
+        this.hpText.x = this.x;
+        this.hpText.alpha = 1;
+        this.hpText.setText(this.hp);
     }
 
 }
@@ -146,7 +162,7 @@ class Sword extends Phaser.Physics.Arcade.Sprite {
     }
 
     attack(x, y, dir) {
-        switch(dir) {
+        switch(dir) { // determine where the sword attack parameters based on the cardinal direction of the attack
             case 0:
                 this.x = x - (14 * 4);
                 this.y = y;

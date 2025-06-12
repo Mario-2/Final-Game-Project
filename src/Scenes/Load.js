@@ -10,6 +10,10 @@ class Load extends Phaser.Scene {
         this.load.audio("lose", "lose.wav");
         this.load.audio("dash", "dash.wav");
         this.load.audio("win", "win.wav");
+        this.load.audio("hit", "hit.wav");
+        this.load.audio("die", "die.wav");
+        this.load.audio("pickup", "pickup.wav");
+        this.load.audio("miss", "miss.wav");
 
         // Load tilemap information
         this.load.image("dungeon_tiles", "dungeon_tiles.png");                         // Packed tilemap
@@ -23,6 +27,8 @@ class Load extends Phaser.Scene {
         this.load.image("player", "tile_0096.png");
         this.load.image("sword", "tile_0106.png");
         this.load.image("dagger", "tile_0103.png");
+        this.load.image("ghost", "tile_0121.png");
+        this.load.image("potion", "tile_0115.png");
 
         this.load.multiatlas("kenny-particles", "kenny-particles.json");
 

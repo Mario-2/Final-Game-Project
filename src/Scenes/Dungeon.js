@@ -50,7 +50,15 @@ class Dungeon extends Phaser.Scene {
 
         my.sprite.enemies = [];
         for(let i = 0; i < this.enemyLayer.objects.length; i++) {
-            my.sprite.enemies[i] = new Enemy(this, this.enemyLayer.objects[i].x * this.SCALE, this.enemyLayer.objects[i].y * this.SCALE, "player", null, this.SCALE, my.sprite.player);
+            my.sprite.enemies[i] = new Enemy(this, this.enemyLayer.objects[i].x * this.SCALE, this.enemyLayer.objects[i].y * this.SCALE, "ghost", null, this.SCALE, my.sprite.player);
+        }
+
+        this.healingLayer = this.map.getObjectLayer("Healing");
+
+        my.sprite.healing = [];
+        for(let i = 0; i < this.healingLayer.objects.length; i++) {
+            my.sprite.healing[i] = this.physics.add.sprite(this.healingLayer.objects[i].x * this.SCALE, this.healingLayer.objects[i].y * this.SCALE, "potion").setScale(this.SCALE);
+            this.physics.add.overlap(my.sprite.player, my.sprite.healing[i], _ => this.healingPotion(my.sprite.healing[i]))
         }
 
         // add camera zones
@@ -89,7 +97,7 @@ class Dungeon extends Phaser.Scene {
         if(this.currentCameraZone != zone) {
             this.currentCameraZone = zone;
 
-            for(let i = 0; i < my.sprite.enemies.length; i++) {
+            for(let i = 0; i < my.sprite.enemies.length; i++) { // set enemies to be active if inside a camera zone, and inactive if not
                 if(my.sprite.enemies[i].defeated == false) {
                     if(my.sprite.enemies[i].x > x && my.sprite.enemies[i].x < x + width && my.sprite.enemies[i].y > y && my.sprite.enemies[i].y < y + height) {
                         my.sprite.enemies[i].setActive(true);
@@ -104,5 +112,12 @@ class Dungeon extends Phaser.Scene {
 
             this.cameras.main.setBounds(x, y, width, height);
         }
+    }
+
+    healingPotion(potion) {
+        potion.setVisible(false);
+        potion.setActive(false);
+        potion.x = -1000;
+        my.sprite.player.onHeal();
     }
 }
